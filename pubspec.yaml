@@ -1,0 +1,23 @@
+name: hopital_app
+description: Application de gestion hospitalière
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0' # version de sdk mise à jour pour compatibilité avec les dernières versions de Flutter
+
+dependencies:
+  flutter:
+    sdk: flutter
+  sqflite: ^2.3.0          # Base de données SQLite
+  path: ^1.8.3              # Pour les chemins de fichiers
+  intl: ^0.18.1             # Pour formater les dates
+  cupertino_icons: ^1.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
