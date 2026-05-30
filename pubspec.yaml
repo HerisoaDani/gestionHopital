@@ -14,9 +14,9 @@ dependencies:
   intl: ^0.18.1             # Pour formater les dates
   cupertino_icons: ^1.0.2
   pdf: ^3.10.8              # Génération de PDF
-  printing: ^5.12.0         # Aperçu + partage du PDF
+  printing: ^5.14.3          # Aperçu + partage du PDF dernière version
   path_provider: ^2.1.2     # Accès au dossier de téléchargement
-  share_plus: ^9.0.0        # Partage de fichiers (WhatsApp, email...)
+  share_plus: ^13.0.0        # Partage de fichiers (WhatsApp, email...)
   open_filex: ^4.3.4        # Ouvrir le PDF après génération
 
 dev_dependencies:
