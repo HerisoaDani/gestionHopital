@@ -146,7 +146,7 @@ class _ConsultationsScreenState extends State<ConsultationsScreen> {
         border: Border(left: BorderSide(color: statutColor, width: 4)),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 8,
               offset: const Offset(0, 2)),
         ],
@@ -165,7 +165,7 @@ class _ConsultationsScreenState extends State<ConsultationsScreen> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
-                      color: statutColor.withOpacity(0.1),
+                      color: statutColor.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Row(

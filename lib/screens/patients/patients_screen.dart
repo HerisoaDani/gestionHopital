@@ -193,7 +193,7 @@ class _PatientsScreenState extends State<PatientsScreen> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 8,
               offset: const Offset(0, 2)),
         ],
@@ -203,8 +203,8 @@ class _PatientsScreenState extends State<PatientsScreen> {
         isThreeLine: true,
         leading: CircleAvatar(
           backgroundColor: patient.sexe == 'M'
-              ? const Color(0xFF1565C0).withOpacity(0.1)
-              : Colors.pink.withOpacity(0.1),
+              ? const Color(0xFF1565C0).withValues(alpha: 0.1)
+              : Colors.pink.withValues(alpha: 0.1),
           child: Text(
             patient.prenom[0].toUpperCase(),
             style: TextStyle(

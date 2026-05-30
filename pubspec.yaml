@@ -1,7 +1,7 @@
 name: hopital_app
 description: Application de gestion hospitalière
 publish_to: 'none'
-version: 1.0.0+1
+version: 2.0.0+1
 
 environment:
   sdk: '>=3.0.0 <4.0.0' # version de sdk mise à jour pour compatibilité avec les dernières versions de Flutter

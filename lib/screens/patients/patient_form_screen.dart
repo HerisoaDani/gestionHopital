@@ -30,7 +30,16 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
   String _groupeSanguin = 'A+';
   bool _isLoading = false;
 
-  final List<String> _groupesSanguins = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+  final List<String> _groupesSanguins = [
+    'A+',
+    'A-',
+    'B+',
+    'B-',
+    'AB+',
+    'AB-',
+    'O+',
+    'O-',
+  ];
 
   @override
   void initState() {
@@ -100,16 +109,20 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
         Navigator.pop(context); // Retourne à la liste
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(widget.patient == null ? 'Patient ajouté !' : 'Patient modifié !'),
+            content: Text(
+              widget.patient == null ? 'Patient ajouté !' : 'Patient modifié !',
+            ),
             backgroundColor: Colors.green,
           ),
         );
       }
     } catch (e) {
-      setState(() => _isLoading = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erreur : $e'), backgroundColor: Colors.red),
-      );
+      if (mounted) {
+        setState(() => _isLoading = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erreur : $e'), backgroundColor: Colors.red),
+        );
+      }
     }
   }
 
@@ -141,7 +154,8 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
                     controller: _prenomController,
                     label: 'Prénom',
                     icon: Icons.person,
-                    validator: (v) => v!.isEmpty ? 'Le prénom est requis' : null,
+                    validator: (v) =>
+                        v!.isEmpty ? 'Le prénom est requis' : null,
                   ),
                   const SizedBox(height: 12),
                   _buildTextField(
@@ -154,7 +168,10 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
                   // Sélecteur de sexe
                   Row(
                     children: [
-                      const Text('Sexe :', style: TextStyle(fontWeight: FontWeight.w500)),
+                      const Text(
+                        'Sexe :',
+                        style: TextStyle(fontWeight: FontWeight.w500),
+                      ),
                       const SizedBox(width: 16),
                       _buildChoiceChip('M', 'Masculin', Icons.male),
                       const SizedBox(width: 8),
@@ -170,7 +187,8 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
                         controller: _dateNaissanceController,
                         label: 'Date de naissance',
                         icon: Icons.calendar_today,
-                        validator: (v) => v!.isEmpty ? 'La date est requise' : null,
+                        validator: (v) =>
+                            v!.isEmpty ? 'La date est requise' : null,
                       ),
                     ),
                   ),
@@ -185,7 +203,8 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
                     label: 'Téléphone',
                     icon: Icons.phone,
                     keyboardType: TextInputType.phone,
-                    validator: (v) => v!.isEmpty ? 'Le téléphone est requis' : null,
+                    validator: (v) =>
+                        v!.isEmpty ? 'Le téléphone est requis' : null,
                   ),
                   const SizedBox(height: 12),
                   _buildTextField(
@@ -193,7 +212,8 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
                     label: 'Adresse',
                     icon: Icons.location_on,
                     maxLines: 2,
-                    validator: (v) => v!.isEmpty ? 'L\'adresse est requise' : null,
+                    validator: (v) =>
+                        v!.isEmpty ? 'L\'adresse est requise' : null,
                   ),
                 ],
               ),
@@ -201,20 +221,30 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
               _buildCard(
                 title: '🩸 Médical',
                 children: [
-                  const Text('Groupe sanguin :', style: TextStyle(fontWeight: FontWeight.w500)),
+                  const Text(
+                    'Groupe sanguin :',
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  ),
                   const SizedBox(height: 8),
                   Wrap(
                     spacing: 8,
-                    children: _groupesSanguins.map((g) => ChoiceChip(
-                      label: Text(g),
-                      selected: _groupeSanguin == g,
-                      onSelected: (_) => setState(() => _groupeSanguin = g),
-                      selectedColor: const Color(0xFF1565C0),
-                      labelStyle: TextStyle(
-                        color: _groupeSanguin == g ? Colors.white : Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )).toList(),
+                    children: _groupesSanguins
+                        .map(
+                          (g) => ChoiceChip(
+                            label: Text(g),
+                            selected: _groupeSanguin == g,
+                            onSelected: (_) =>
+                                setState(() => _groupeSanguin = g),
+                            selectedColor: const Color(0xFF1565C0),
+                            labelStyle: TextStyle(
+                              color: _groupeSanguin == g
+                                  ? Colors.white
+                                  : Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        )
+                        .toList(),
                   ),
                 ],
               ),
@@ -224,18 +254,26 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
                 onPressed: _isLoading ? null : _savePatient,
                 icon: _isLoading
                     ? const SizedBox(
-                        width: 20, height: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
                       )
                     : const Icon(Icons.save, color: Colors.white),
                 label: Text(
-                  isEditing ? 'Enregistrer les modifications' : 'Ajouter le patient',
+                  isEditing
+                      ? 'Enregistrer les modifications'
+                      : 'Ajouter le patient',
                   style: const TextStyle(color: Colors.white, fontSize: 16),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF1565C0),
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
             ],
@@ -253,13 +291,16 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 8),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          Text(
+            title,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 16),
           ...children,
         ],

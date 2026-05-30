@@ -128,7 +128,7 @@ class _MedecinsScreenState extends State<MedecinsScreen> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 8,
               offset: const Offset(0, 2)),
         ],
@@ -137,7 +137,7 @@ class _MedecinsScreenState extends State<MedecinsScreen> {
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         isThreeLine: true,
         leading: CircleAvatar(
-          backgroundColor: color.withOpacity(0.15),
+          backgroundColor: color.withValues(alpha: 0.15),
           child: Text(
             'Dr',
             style: TextStyle(
@@ -155,7 +155,7 @@ class _MedecinsScreenState extends State<MedecinsScreen> {
               margin: const EdgeInsets.only(top: 4),
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
+                color: color.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
