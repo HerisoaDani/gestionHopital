@@ -10,6 +10,7 @@ import '../models/consultation.dart';
 import '../models/chambre.dart';
 import '../models/bloc.dart';
 import '../models/hospitalisation.dart';
+import '../models/facture.dart';
 
 class DatabaseHelper {
   // Singleton Pattern : une seule instance de la BDD dans toute l'app
@@ -33,7 +34,7 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 2, // ← version 2 pour les nouvelles tables
+      version: 3, // ← version 3 pour inclure les factures.
       onCreate: _createTables,
       onUpgrade: _onUpgrade, // ← migration si l'app était déjà installée
     );
@@ -90,12 +91,16 @@ class DatabaseHelper {
     await _insertDemoData(db);
     await _createNouvellesTables(db);
     await _insertDemoDataHospitalisation(db);
+    await _createTablesFacturation(db);
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
       await _createNouvellesTables(db);
       await _insertDemoDataHospitalisation(db);
+    }
+    if (oldVersion < 3) {
+      await _createTablesFacturation(db);
     }
   }
 
@@ -242,6 +247,146 @@ class DatabaseHelper {
       'equipements': 'Amplificateur de brillance, Traction',
       'description': 'Chirurgie osseuse et articulaire'
     });
+  }
+
+  // Crée les tables de facturation
+  Future<void> _createTablesFacturation(Database db) async {
+    await db.execute('''
+    CREATE TABLE IF NOT EXISTS factures (
+      id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+      numero             TEXT NOT NULL UNIQUE,
+      type               TEXT NOT NULL,
+      consultation_id    INTEGER,
+      hospitalisation_id INTEGER,
+      patient_id         INTEGER NOT NULL,
+      date               TEXT NOT NULL,
+      statut             TEXT DEFAULT 'en_attente',
+      mode_paiement      TEXT DEFAULT 'especes',
+      remise             REAL DEFAULT 0,
+      notes              TEXT DEFAULT '',
+      FOREIGN KEY (patient_id)         REFERENCES patients (id),
+      FOREIGN KEY (consultation_id)    REFERENCES consultations (id),
+      FOREIGN KEY (hospitalisation_id) REFERENCES hospitalisations (id)
+    )
+  ''');
+
+    await db.execute('''
+    CREATE TABLE IF NOT EXISTS lignes_facture (
+      id          INTEGER PRIMARY KEY AUTOINCREMENT,
+      facture_id  INTEGER NOT NULL,
+      description TEXT NOT NULL,
+      quantite    INTEGER NOT NULL DEFAULT 1,
+      prix_unitaire REAL NOT NULL,
+      FOREIGN KEY (facture_id) REFERENCES factures (id) ON DELETE CASCADE
+    )
+  ''');
+  }
+
+// ═══════════════════════════════════════════
+//            CRUD - FACTURES
+// ═══════════════════════════════════════════
+
+// Génère un numéro de facture unique : FACT-AAAA-NNN
+  Future<String> _genererNumeroFacture(Database db) async {
+    final annee = DateTime.now().year;
+    final count = Sqflite.firstIntValue(
+          await db.rawQuery(
+              "SELECT COUNT(*) FROM factures WHERE numero LIKE 'FACT-$annee-%'"),
+        ) ??
+        0;
+    return 'FACT-$annee-${(count + 1).toString().padLeft(3, '0')}';
+  }
+
+  Future<int> insertFacture(Facture facture) async {
+    final db = await database;
+    // Génère le numéro si vide
+    final numero = facture.numero.isEmpty
+        ? await _genererNumeroFacture(db)
+        : facture.numero;
+
+    final id =
+        await db.insert('factures', {...facture.toMap(), 'numero': numero});
+
+    // Insère les lignes
+    for (final ligne in facture.lignes) {
+      await db.insert('lignes_facture', {
+        'facture_id': id,
+        ...ligne.toMap(),
+      });
+    }
+    return id;
+  }
+
+  Future<List<Facture>> getAllFactures() async {
+    final db = await database;
+    final maps = await db.rawQuery('''
+    SELECT f.*, p.nom || ' ' || p.prenom AS patient_nom
+    FROM factures f
+    JOIN patients p ON f.patient_id = p.id
+    ORDER BY f.date DESC
+  ''');
+
+    final factures = maps.map((m) => Facture.fromMap(Map.of(m))).toList();
+
+    // Charge les lignes pour chaque facture
+    for (final facture in factures) {
+      facture.lignes = await getLignesFacture(facture.id!);
+    }
+    return factures;
+  }
+
+  Future<List<LigneFacture>> getLignesFacture(int factureId) async {
+    final db = await database;
+    final maps = await db.query(
+      'lignes_facture',
+      where: 'facture_id = ?',
+      whereArgs: [factureId],
+    );
+    return maps.map((m) => LigneFacture.fromMap(m)).toList();
+  }
+
+  Future<int> updateFactureStatut(int id, String statut) async {
+    final db = await database;
+    return await db.update('factures', {'statut': statut},
+        where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<int> updateFacture(Facture facture) async {
+    final db = await database;
+    await db.update('factures', facture.toMap(),
+        where: 'id = ?', whereArgs: [facture.id]);
+    // Supprime et recrée les lignes
+    await db.delete('lignes_facture',
+        where: 'facture_id = ?', whereArgs: [facture.id]);
+    for (final ligne in facture.lignes) {
+      await db.insert('lignes_facture', {
+        'facture_id': facture.id,
+        ...ligne.toMap(),
+      });
+    }
+    return facture.id!;
+  }
+
+  Future<int> deleteFacture(int id) async {
+    final db = await database;
+    return await db.delete('factures', where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<Map<String, dynamic>> getStatistiquesFacturation() async {
+    final db = await database;
+    final totalPayees = await db.rawQuery(
+      "SELECT SUM(f.remise), COUNT(*) FROM factures f WHERE f.statut = 'payee'",
+    );
+    // Calcule le total réel en Dart (somme des totaux par facture)
+    final factures = await getAllFactures();
+    final payees = factures.where((f) => f.statut == 'payee');
+    final attente = factures.where((f) => f.statut == 'en_attente');
+    return {
+      'totalEncaisse': payees.fold(0.0, (s, f) => s + f.total),
+      'totalAttente': attente.fold(0.0, (s, f) => s + f.total),
+      'nombrePayees': payees.length,
+      'nombreAttente': attente.length,
+    };
   }
 
   // ═══════════════════════════════════════════

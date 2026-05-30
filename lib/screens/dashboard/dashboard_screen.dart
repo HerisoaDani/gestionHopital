@@ -9,6 +9,7 @@ import '../consultations/consultations_screen.dart';
 import '../chambres/chambres_screen.dart';
 import '../blocs/blocs_screen.dart';
 import '../hospitalisations/hospitalisations_screen.dart';
+import '../factures/factures_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -226,6 +227,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       description: 'Gérer les salles d\'opération',
                       color: const Color(0xFF4527A0),
                       onTap: () => _navigateTo(context, const BlocsScreen()),
+                    ),
+                    const SizedBox(height: 12),
+                    _buildMenuButton(
+                      context,
+                      icon: Icons.receipt_long,
+                      label: 'Facturation',
+                      description: 'Gérer les factures et exporter en PDF',
+                      color: const Color(0xFF006064),
+                      onTap: () => _navigateTo(context, const FacturesScreen()),
                     ),
                   ],
                 ),
