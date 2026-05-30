@@ -27,9 +27,18 @@ class _MedecinFormScreenState extends State<MedecinFormScreen> {
   bool _isLoading = false;
 
   final List<String> _specialites = [
-    'Cardiologie', 'Pédiatrie', 'Neurologie', 'Chirurgie',
-    'Gynécologie', 'Orthopédie', 'Dermatologie', 'Ophtalmologie',
-    'Médecine générale', 'Psychiatrie', 'Radiologie', 'Anesthésie',
+    'Cardiologie',
+    'Pédiatrie',
+    'Neurologie',
+    'Chirurgie',
+    'Gynécologie',
+    'Orthopédie',
+    'Dermatologie',
+    'Ophtalmologie',
+    'Médecine générale',
+    'Psychiatrie',
+    'Radiologie',
+    'Anesthésie',
   ];
 
   @override
@@ -77,7 +86,10 @@ class _MedecinFormScreenState extends State<MedecinFormScreen> {
       if (mounted) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Médecin enregistré !'), backgroundColor: Colors.green),
+          const SnackBar(
+            content: Text('Médecin enregistré !'),
+            backgroundColor: Colors.green,
+          ),
         );
       }
     } catch (e) {
@@ -90,8 +102,10 @@ class _MedecinFormScreenState extends State<MedecinFormScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF0F4F8),
       appBar: AppBar(
-        title: Text(widget.medecin == null ? 'Nouveau médecin' : 'Modifier médecin',
-            style: const TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(
+          widget.medecin == null ? 'Nouveau médecin' : 'Modifier médecin',
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
         backgroundColor: const Color(0xFF2E7D32),
         foregroundColor: Colors.white,
       ),
@@ -105,21 +119,36 @@ class _MedecinFormScreenState extends State<MedecinFormScreen> {
               _buildCard(
                 title: '👨‍⚕️ Informations',
                 children: [
-                  _buildTextField(_prenomController, 'Prénom', Icons.person,
-                      validator: (v) => v!.isEmpty ? 'Requis' : null),
+                  _buildTextField(
+                    _prenomController,
+                    'Prénom',
+                    Icons.person,
+                    validator: (v) => v!.isEmpty ? 'Requis' : null,
+                  ),
                   const SizedBox(height: 12),
-                  _buildTextField(_nomController, 'Nom', Icons.person_outline,
-                      validator: (v) => v!.isEmpty ? 'Requis' : null),
+                  _buildTextField(
+                    _nomController,
+                    'Nom',
+                    Icons.person_outline,
+                    validator: (v) => v!.isEmpty ? 'Requis' : null,
+                  ),
                   const SizedBox(height: 12),
                   // Dropdown pour la spécialité
                   DropdownButtonFormField<String>(
                     value: _specialite,
                     decoration: InputDecoration(
                       labelText: 'Spécialité',
-                      prefixIcon: const Icon(Icons.medical_services, color: Color(0xFF2E7D32)),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                      prefixIcon: const Icon(
+                        Icons.medical_services,
+                        color: Color(0xFF2E7D32),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
-                    items: _specialites.map((s) => DropdownMenuItem(value: s, child: Text(s))).toList(),
+                    items: _specialites
+                        .map((s) => DropdownMenuItem(value: s, child: Text(s)))
+                        .toList(),
                     onChanged: (v) => setState(() => _specialite = v!),
                   ),
                 ],
@@ -128,17 +157,25 @@ class _MedecinFormScreenState extends State<MedecinFormScreen> {
               _buildCard(
                 title: '📞 Contact',
                 children: [
-                  _buildTextField(_telephoneController, 'Téléphone', Icons.phone,
-                      keyboardType: TextInputType.phone,
-                      validator: (v) => v!.isEmpty ? 'Requis' : null),
+                  _buildTextField(
+                    _telephoneController,
+                    'Téléphone',
+                    Icons.phone,
+                    keyboardType: TextInputType.phone,
+                    validator: (v) => v!.isEmpty ? 'Requis' : null,
+                  ),
                   const SizedBox(height: 12),
-                  _buildTextField(_emailController, 'Email', Icons.email,
-                      keyboardType: TextInputType.emailAddress,
-                      validator: (v) {
-                        if (v!.isEmpty) return 'Requis';
-                        if (!v.contains('@')) return 'Email invalide';
-                        return null;
-                      }),
+                  _buildTextField(
+                    _emailController,
+                    'Email',
+                    Icons.email,
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (v) {
+                      if (v!.isEmpty) return 'Requis';
+                      if (!v.contains('@')) return 'Email invalide';
+                      return null;
+                    },
+                  ),
                 ],
               ),
               const SizedBox(height: 16),
@@ -146,12 +183,18 @@ class _MedecinFormScreenState extends State<MedecinFormScreen> {
                 title: '📋 Statut',
                 children: [
                   SwitchListTile(
-                    title: const Text('Disponible pour consultations',
-                        style: TextStyle(fontWeight: FontWeight.w500)),
-                    subtitle: Text(_disponible ? 'Le médecin accepte des patients' : 'Non disponible'),
+                    title: const Text(
+                      'Disponible pour consultations',
+                      style: TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                    subtitle: Text(
+                      _disponible
+                          ? 'Le médecin accepte des patients'
+                          : 'Non disponible',
+                    ),
                     value: _disponible,
                     onChanged: (v) => setState(() => _disponible = v),
-                    activeColor: const Color(0xFF2E7D32),
+                    activeThumbColor: const Color(0xFF2E7D32),
                   ),
                 ],
               ),
@@ -159,7 +202,14 @@ class _MedecinFormScreenState extends State<MedecinFormScreen> {
               ElevatedButton.icon(
                 onPressed: _isLoading ? null : _saveMedecin,
                 icon: _isLoading
-                    ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
                     : const Icon(Icons.save, color: Colors.white),
                 label: Text(
                   widget.medecin == null ? 'Ajouter le médecin' : 'Enregistrer',
@@ -168,7 +218,9 @@ class _MedecinFormScreenState extends State<MedecinFormScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF2E7D32),
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
             ],
@@ -184,12 +236,17 @@ class _MedecinFormScreenState extends State<MedecinFormScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8)],
+        boxShadow: [
+          BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 8),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          Text(
+            title,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 16),
           ...children,
         ],
@@ -198,7 +255,9 @@ class _MedecinFormScreenState extends State<MedecinFormScreen> {
   }
 
   Widget _buildTextField(
-    TextEditingController controller, String label, IconData icon, {
+    TextEditingController controller,
+    String label,
+    IconData icon, {
     String? Function(String?)? validator,
     TextInputType? keyboardType,
   }) {

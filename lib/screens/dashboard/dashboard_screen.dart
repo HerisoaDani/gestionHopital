@@ -6,6 +6,9 @@ import '../../database/database_helper.dart';
 import '../patients/patients_screen.dart';
 import '../medecins/medecins_screen.dart';
 import '../consultations/consultations_screen.dart';
+import '../chambres/chambres_screen.dart';
+import '../blocs/blocs_screen.dart';
+import '../hospitalisations/hospitalisations_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -117,6 +120,42 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 const Color(0xFF6A1B9A))),
                       ],
                     ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Expanded(
+                            child: _buildStatCard(
+                                'Hospitalisés',
+                                _stats['hospitalisationsEnCours'] ?? 0,
+                                Icons.hotel,
+                                const Color(0xFF00695C))),
+                        const SizedBox(width: 12),
+                        Expanded(
+                            child: _buildStatCard(
+                                'Chambres',
+                                _stats['chambres'] ?? 0,
+                                Icons.bed,
+                                const Color(0xFF00838F))),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Expanded(
+                            child: _buildStatCard(
+                                'Blocs opér.',
+                                _stats['blocs'] ?? 0,
+                                Icons.biotech,
+                                const Color(0xFF4527A0))),
+                        const SizedBox(width: 12),
+                        Expanded(
+                            child: _buildStatCard(
+                                'Médecins',
+                                _stats['medecins'] ?? 0,
+                                Icons.medical_services,
+                                const Color(0xFF2E7D32))),
+                      ],
+                    ),
                     const SizedBox(height: 32),
 
                     // Section Accès rapide
@@ -159,6 +198,35 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       onTap: () =>
                           _navigateTo(context, const ConsultationsScreen()),
                     ),
+                    const SizedBox(height: 12),
+                    _buildMenuButton(
+                      context,
+                      icon: Icons.hotel,
+                      label: 'Hospitalisations',
+                      description:
+                          'Admettre et suivre les patients hospitalisés',
+                      color: const Color(0xFF00695C),
+                      onTap: () =>
+                          _navigateTo(context, const HospitalisationsScreen()),
+                    ),
+                    const SizedBox(height: 12),
+                    _buildMenuButton(
+                      context,
+                      icon: Icons.bed,
+                      label: 'Chambres',
+                      description: 'Gérer les chambres et leur occupation',
+                      color: const Color(0xFF00838F),
+                      onTap: () => _navigateTo(context, const ChambresScreen()),
+                    ),
+                    const SizedBox(height: 12),
+                    _buildMenuButton(
+                      context,
+                      icon: Icons.biotech,
+                      label: 'Blocs Opératoires',
+                      description: 'Gérer les salles d\'opération',
+                      color: const Color(0xFF4527A0),
+                      onTap: () => _navigateTo(context, const BlocsScreen()),
+                    ),
                   ],
                 ),
               ),
@@ -174,7 +242,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.15),
+            color: color.withValues(alpha: 0.15),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -230,10 +298,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: color.withOpacity(0.2)),
+          border: Border.all(color: color.withValues(alpha: 0.2)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -244,7 +312,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
+                color: color.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(icon, color: color, size: 28),
