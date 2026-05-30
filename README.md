@@ -122,8 +122,8 @@ intl: ^0.18.1       # Formatage des dates
 
 # Perspectives
 
-- Ajouter un module **Chambre / Hospitalisation**
-- Ajouter des **ordonnances** en PDF
-- Synchroniser avec un **serveur distant** (API REST)
-- Ajouter une **authentification** (médecin, secrétaire, admin)
-- Ajouter des **graphiques** de statistiques
+- Ajouter un module **Chambre / Hospitalisation** : feature/chambre-hospitalisation
+- Ajouter des **ordonnances** en PDF : feature/export-PDF
+- Synchroniser avec un **serveur distant** (API REST) : feature/serveur-distant
+- Ajouter une **authentification** (médecin, secrétaire, admin) : feature/authentification
+- Ajouter des **graphiques** de statistiques : feature/dashboard
