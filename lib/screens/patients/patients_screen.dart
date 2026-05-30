@@ -68,7 +68,8 @@ class _PatientsScreenState extends State<PatientsScreen> {
           ElevatedButton(
             onPressed: () => Navigator.pop(ctx, true),
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('Supprimer', style: TextStyle(color: Colors.white)),
+            child:
+                const Text('Supprimer', style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -79,7 +80,8 @@ class _PatientsScreenState extends State<PatientsScreen> {
       _loadPatients();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Patient supprimé'), backgroundColor: Colors.red),
+          const SnackBar(
+              content: Text('Patient supprimé'), backgroundColor: Colors.red),
         );
       }
     }
@@ -90,7 +92,8 @@ class _PatientsScreenState extends State<PatientsScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF0F4F8),
       appBar: AppBar(
-        title: const Text('Patients', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text('Patients',
+            style: TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: const Color(0xFF1565C0),
         foregroundColor: Colors.white,
       ),
@@ -102,7 +105,8 @@ class _PatientsScreenState extends State<PatientsScreen> {
         ).then((_) => _loadPatients()),
         backgroundColor: const Color(0xFF1565C0),
         icon: const Icon(Icons.add, color: Colors.white),
-        label: const Text('Nouveau patient', style: TextStyle(color: Colors.white)),
+        label: const Text('Nouveau patient',
+            style: TextStyle(color: Colors.white)),
       ),
       body: Column(
         children: [
@@ -157,9 +161,11 @@ class _PatientsScreenState extends State<PatientsScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.people_outline, size: 64, color: Colors.grey),
+                            Icon(Icons.people_outline,
+                                size: 64, color: Colors.grey),
                             SizedBox(height: 16),
-                            Text('Aucun patient trouvé', style: TextStyle(color: Colors.grey)),
+                            Text('Aucun patient trouvé',
+                                style: TextStyle(color: Colors.grey)),
                           ],
                         ),
                       )
@@ -168,7 +174,8 @@ class _PatientsScreenState extends State<PatientsScreen> {
                         child: ListView.builder(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           itemCount: _patients.length,
-                          itemBuilder: (ctx, i) => _buildPatientCard(_patients[i]),
+                          itemBuilder: (ctx, i) =>
+                              _buildPatientCard(_patients[i]),
                         ),
                       ),
           ),
@@ -185,11 +192,15 @@ class _PatientsScreenState extends State<PatientsScreen> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8, offset: const Offset(0, 2)),
+          BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 8,
+              offset: const Offset(0, 2)),
         ],
       ),
       child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        isThreeLine: true,
         leading: CircleAvatar(
           backgroundColor: patient.sexe == 'M'
               ? const Color(0xFF1565C0).withOpacity(0.1)
@@ -198,7 +209,8 @@ class _PatientsScreenState extends State<PatientsScreen> {
             patient.prenom[0].toUpperCase(),
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: patient.sexe == 'M' ? const Color(0xFF1565C0) : Colors.pink,
+              color:
+                  patient.sexe == 'M' ? const Color(0xFF1565C0) : Colors.pink,
             ),
           ),
         ),
@@ -215,18 +227,31 @@ class _PatientsScreenState extends State<PatientsScreen> {
         ),
         trailing: PopupMenuButton(
           itemBuilder: (ctx) => [
-            const PopupMenuItem(value: 'edit', child: Row(
-              children: [Icon(Icons.edit, color: Colors.blue), SizedBox(width: 8), Text('Modifier')],
-            )),
-            const PopupMenuItem(value: 'delete', child: Row(
-              children: [Icon(Icons.delete, color: Colors.red), SizedBox(width: 8), Text('Supprimer')],
-            )),
+            const PopupMenuItem(
+                value: 'edit',
+                child: Row(
+                  children: [
+                    Icon(Icons.edit, color: Colors.blue),
+                    SizedBox(width: 8),
+                    Text('Modifier')
+                  ],
+                )),
+            const PopupMenuItem(
+                value: 'delete',
+                child: Row(
+                  children: [
+                    Icon(Icons.delete, color: Colors.red),
+                    SizedBox(width: 8),
+                    Text('Supprimer')
+                  ],
+                )),
           ],
           onSelected: (value) {
             if (value == 'edit') {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => PatientFormScreen(patient: patient)),
+                MaterialPageRoute(
+                    builder: (_) => PatientFormScreen(patient: patient)),
               ).then((_) => _loadPatients());
             } else if (value == 'delete') {
               _deletePatient(patient);

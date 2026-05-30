@@ -40,11 +40,14 @@ class _MedecinsScreenState extends State<MedecinsScreen> {
         title: const Text('Confirmer la suppression'),
         content: Text('Supprimer Dr. ${medecin.prenom} ${medecin.nom} ?'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Annuler')),
+          TextButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: const Text('Annuler')),
           ElevatedButton(
             onPressed: () => Navigator.pop(ctx, true),
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('Supprimer', style: TextStyle(color: Colors.white)),
+            child:
+                const Text('Supprimer', style: TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -75,7 +78,8 @@ class _MedecinsScreenState extends State<MedecinsScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF0F4F8),
       appBar: AppBar(
-        title: const Text('Médecins', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text('Médecins',
+            style: TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: const Color(0xFF2E7D32),
         foregroundColor: Colors.white,
       ),
@@ -86,7 +90,8 @@ class _MedecinsScreenState extends State<MedecinsScreen> {
         ).then((_) => _loadMedecins()),
         backgroundColor: const Color(0xFF2E7D32),
         icon: const Icon(Icons.add, color: Colors.white),
-        label: const Text('Nouveau médecin', style: TextStyle(color: Colors.white)),
+        label: const Text('Nouveau médecin',
+            style: TextStyle(color: Colors.white)),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -97,9 +102,11 @@ class _MedecinsScreenState extends State<MedecinsScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.medical_services_outlined, size: 64, color: Colors.grey),
+                          Icon(Icons.medical_services_outlined,
+                              size: 64, color: Colors.grey),
                           SizedBox(height: 16),
-                          Text('Aucun médecin enregistré', style: TextStyle(color: Colors.grey)),
+                          Text('Aucun médecin enregistré',
+                              style: TextStyle(color: Colors.grey)),
                         ],
                       ),
                     )
@@ -120,16 +127,21 @@ class _MedecinsScreenState extends State<MedecinsScreen> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8, offset: const Offset(0, 2)),
+          BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 8,
+              offset: const Offset(0, 2)),
         ],
       ),
       child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        isThreeLine: true,
         leading: CircleAvatar(
           backgroundColor: color.withOpacity(0.15),
           child: Text(
             'Dr',
-            style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 12),
+            style: TextStyle(
+                color: color, fontWeight: FontWeight.bold, fontSize: 12),
           ),
         ),
         title: Text(
@@ -148,7 +160,8 @@ class _MedecinsScreenState extends State<MedecinsScreen> {
               ),
               child: Text(
                 medecin.specialite,
-                style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.w600),
+                style: TextStyle(
+                    color: color, fontSize: 12, fontWeight: FontWeight.w600),
               ),
             ),
             Text('📞 ${medecin.telephone}'),
@@ -173,18 +186,31 @@ class _MedecinsScreenState extends State<MedecinsScreen> {
         ),
         trailing: PopupMenuButton(
           itemBuilder: (ctx) => [
-            const PopupMenuItem(value: 'edit', child: Row(
-              children: [Icon(Icons.edit, color: Colors.blue), SizedBox(width: 8), Text('Modifier')],
-            )),
-            const PopupMenuItem(value: 'delete', child: Row(
-              children: [Icon(Icons.delete, color: Colors.red), SizedBox(width: 8), Text('Supprimer')],
-            )),
+            const PopupMenuItem(
+                value: 'edit',
+                child: Row(
+                  children: [
+                    Icon(Icons.edit, color: Colors.blue),
+                    SizedBox(width: 8),
+                    Text('Modifier')
+                  ],
+                )),
+            const PopupMenuItem(
+                value: 'delete',
+                child: Row(
+                  children: [
+                    Icon(Icons.delete, color: Colors.red),
+                    SizedBox(width: 8),
+                    Text('Supprimer')
+                  ],
+                )),
           ],
           onSelected: (value) {
             if (value == 'edit') {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => MedecinFormScreen(medecin: medecin)),
+                MaterialPageRoute(
+                    builder: (_) => MedecinFormScreen(medecin: medecin)),
               ).then((_) => _loadMedecins());
             } else if (value == 'delete') {
               _deleteMedecin(medecin);

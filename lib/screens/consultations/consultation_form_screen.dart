@@ -71,7 +71,8 @@ class _ConsultationFormScreenState extends State<ConsultationFormScreen> {
       // Valeurs par défaut pour une nouvelle consultation
       final now = DateTime.now();
       _dateController.text = now.toString().substring(0, 10);
-      _heureController.text = '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
+      _heureController.text =
+          '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
     }
   }
 
@@ -93,7 +94,8 @@ class _ConsultationFormScreenState extends State<ConsultationFormScreen> {
       initialTime: TimeOfDay.now(),
     );
     if (picked != null) {
-      _heureController.text = '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
+      _heureController.text =
+          '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
     }
   }
 
@@ -101,13 +103,17 @@ class _ConsultationFormScreenState extends State<ConsultationFormScreen> {
     if (!_formKey.currentState!.validate()) return;
     if (_selectedPatient == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Veuillez sélectionner un patient'), backgroundColor: Colors.orange),
+        const SnackBar(
+            content: Text('Veuillez sélectionner un patient'),
+            backgroundColor: Colors.orange),
       );
       return;
     }
     if (_selectedMedecin == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Veuillez sélectionner un médecin'), backgroundColor: Colors.orange),
+        const SnackBar(
+            content: Text('Veuillez sélectionner un médecin'),
+            backgroundColor: Colors.orange),
       );
       return;
     }
@@ -135,7 +141,9 @@ class _ConsultationFormScreenState extends State<ConsultationFormScreen> {
       if (mounted) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Consultation enregistrée !'), backgroundColor: Colors.green),
+          const SnackBar(
+              content: Text('Consultation enregistrée !'),
+              backgroundColor: Colors.green),
         );
       }
     } catch (e) {
@@ -159,7 +167,9 @@ class _ConsultationFormScreenState extends State<ConsultationFormScreen> {
       backgroundColor: const Color(0xFFF0F4F8),
       appBar: AppBar(
         title: Text(
-          widget.consultation == null ? 'Nouvelle consultation' : 'Modifier consultation',
+          widget.consultation == null
+              ? 'Nouvelle consultation'
+              : 'Modifier consultation',
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: const Color(0xFFE65100),
@@ -180,33 +190,53 @@ class _ConsultationFormScreenState extends State<ConsultationFormScreen> {
                         // Dropdown patient
                         DropdownButtonFormField<Patient>(
                           value: _selectedPatient,
+                          isExpanded:
+                              true, // ← empêche le débordement horizontal
                           decoration: InputDecoration(
                             labelText: 'Patient',
-                            prefixIcon: const Icon(Icons.person, color: Color(0xFF1565C0)),
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                            prefixIcon: const Icon(Icons.person,
+                                color: Color(0xFF1565C0)),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12)),
                           ),
                           hint: const Text('Sélectionner un patient'),
-                          items: _patients.map((p) => DropdownMenuItem(
-                            value: p,
-                            child: Text('${p.prenom} ${p.nom}'),
-                          )).toList(),
-                          onChanged: (p) => setState(() => _selectedPatient = p),
+                          items: _patients
+                              .map((p) => DropdownMenuItem(
+                                    value: p,
+                                    child: Text(
+                                      '${p.prenom} ${p.nom}',
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ))
+                              .toList(),
+                          onChanged: (p) =>
+                              setState(() => _selectedPatient = p),
                         ),
                         const SizedBox(height: 12),
                         // Dropdown médecin
                         DropdownButtonFormField<Medecin>(
                           value: _selectedMedecin,
+                          isExpanded:
+                              true, // ← empêche le débordement horizontal
                           decoration: InputDecoration(
                             labelText: 'Médecin',
-                            prefixIcon: const Icon(Icons.medical_services, color: Color(0xFF2E7D32)),
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                            prefixIcon: const Icon(Icons.medical_services,
+                                color: Color(0xFF2E7D32)),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12)),
                           ),
                           hint: const Text('Sélectionner un médecin'),
-                          items: _medecins.map((m) => DropdownMenuItem(
-                            value: m,
-                            child: Text('Dr. ${m.prenom} ${m.nom} (${m.specialite})'),
-                          )).toList(),
-                          onChanged: (m) => setState(() => _selectedMedecin = m),
+                          items: _medecins
+                              .map((m) => DropdownMenuItem(
+                                    value: m,
+                                    child: Text(
+                                      'Dr. ${m.prenom} ${m.nom} — ${m.specialite}',
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ))
+                              .toList(),
+                          onChanged: (m) =>
+                              setState(() => _selectedMedecin = m),
                         ),
                       ],
                     ),
@@ -222,11 +252,16 @@ class _ConsultationFormScreenState extends State<ConsultationFormScreen> {
                                 child: AbsorbPointer(
                                   child: TextFormField(
                                     controller: _dateController,
-                                    validator: (v) => v!.isEmpty ? 'Requis' : null,
+                                    validator: (v) =>
+                                        v!.isEmpty ? 'Requis' : null,
                                     decoration: InputDecoration(
                                       labelText: 'Date',
-                                      prefixIcon: const Icon(Icons.calendar_today, color: Color(0xFFE65100)),
-                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                      prefixIcon: const Icon(
+                                          Icons.calendar_today,
+                                          color: Color(0xFFE65100)),
+                                      border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12)),
                                     ),
                                   ),
                                 ),
@@ -239,11 +274,15 @@ class _ConsultationFormScreenState extends State<ConsultationFormScreen> {
                                 child: AbsorbPointer(
                                   child: TextFormField(
                                     controller: _heureController,
-                                    validator: (v) => v!.isEmpty ? 'Requis' : null,
+                                    validator: (v) =>
+                                        v!.isEmpty ? 'Requis' : null,
                                     decoration: InputDecoration(
                                       labelText: 'Heure',
-                                      prefixIcon: const Icon(Icons.access_time, color: Color(0xFFE65100)),
-                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                      prefixIcon: const Icon(Icons.access_time,
+                                          color: Color(0xFFE65100)),
+                                      border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12)),
                                     ),
                                   ),
                                 ),
@@ -255,12 +294,18 @@ class _ConsultationFormScreenState extends State<ConsultationFormScreen> {
                         // Statut
                         DropdownButtonFormField<String>(
                           value: _statut,
+                          isExpanded: true,
                           decoration: InputDecoration(
                             labelText: 'Statut',
-                            prefixIcon: const Icon(Icons.info_outline, color: Color(0xFFE65100)),
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                            prefixIcon: const Icon(Icons.info_outline,
+                                color: Color(0xFFE65100)),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12)),
                           ),
-                          items: _statuts.map((s) => DropdownMenuItem(value: s, child: Text(s))).toList(),
+                          items: _statuts
+                              .map((s) =>
+                                  DropdownMenuItem(value: s, child: Text(s)))
+                              .toList(),
                           onChanged: (v) => setState(() => _statut = v!),
                         ),
                       ],
@@ -272,11 +317,14 @@ class _ConsultationFormScreenState extends State<ConsultationFormScreen> {
                         TextFormField(
                           controller: _motifController,
                           maxLines: 2,
-                          validator: (v) => v!.isEmpty ? 'Le motif est requis' : null,
+                          validator: (v) =>
+                              v!.isEmpty ? 'Le motif est requis' : null,
                           decoration: InputDecoration(
                             labelText: 'Motif de consultation',
-                            prefixIcon: const Icon(Icons.chat_bubble_outline, color: Color(0xFFE65100)),
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                            prefixIcon: const Icon(Icons.chat_bubble_outline,
+                                color: Color(0xFFE65100)),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12)),
                           ),
                         ),
                         const SizedBox(height: 12),
@@ -285,8 +333,10 @@ class _ConsultationFormScreenState extends State<ConsultationFormScreen> {
                           maxLines: 2,
                           decoration: InputDecoration(
                             labelText: 'Diagnostic (optionnel)',
-                            prefixIcon: const Icon(Icons.assignment, color: Color(0xFFE65100)),
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                            prefixIcon: const Icon(Icons.assignment,
+                                color: Color(0xFFE65100)),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12)),
                           ),
                         ),
                         const SizedBox(height: 12),
@@ -295,8 +345,10 @@ class _ConsultationFormScreenState extends State<ConsultationFormScreen> {
                           maxLines: 2,
                           decoration: InputDecoration(
                             labelText: 'Traitement prescrit (optionnel)',
-                            prefixIcon: const Icon(Icons.medication, color: Color(0xFFE65100)),
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                            prefixIcon: const Icon(Icons.medication,
+                                color: Color(0xFFE65100)),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12)),
                           ),
                         ),
                       ],
@@ -305,16 +357,24 @@ class _ConsultationFormScreenState extends State<ConsultationFormScreen> {
                     ElevatedButton.icon(
                       onPressed: _isLoading ? null : _saveConsultation,
                       icon: _isLoading
-                          ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                  strokeWidth: 2, color: Colors.white))
                           : const Icon(Icons.save, color: Colors.white),
                       label: Text(
-                        widget.consultation == null ? 'Enregistrer la consultation' : 'Modifier',
-                        style: const TextStyle(color: Colors.white, fontSize: 16),
+                        widget.consultation == null
+                            ? 'Enregistrer la consultation'
+                            : 'Modifier',
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 16),
                       ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFFE65100),
                         padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
                       ),
                     ),
                   ],
@@ -330,12 +390,16 @@ class _ConsultationFormScreenState extends State<ConsultationFormScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8)],
+        boxShadow: [
+          BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8)
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          Text(title,
+              style:
+                  const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           const SizedBox(height: 16),
           ...children,
         ],

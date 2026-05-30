@@ -2,11 +2,11 @@
 // Ce fichier définit la structure d'un Patient dans l'application
 
 class Patient {
-  int? id;           // Identifiant unique (auto-généré par SQLite)
-  String nom;        // Nom de famille
-  String prenom;     // Prénom
+  int? id; // Identifiant unique (auto-généré par SQLite)
+  String nom; // Nom de famille
+  String prenom; // Prénom
   String dateNaissance; // Format : YYYY-MM-DD
-  String sexe;       // 'M' ou 'F'
+  String sexe; // 'M' ou 'F'
   String telephone;
   String adresse;
   String groupeSanguin; // Ex: 'A+', 'B-', 'O+', 'AB+'
