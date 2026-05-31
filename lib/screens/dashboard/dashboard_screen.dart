@@ -10,6 +10,7 @@ import '../chambres/chambres_screen.dart';
 import '../blocs/blocs_screen.dart';
 import '../hospitalisations/hospitalisations_screen.dart';
 import '../factures/factures_screen.dart';
+import '/services/auth_service.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -56,6 +57,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
             icon: const Icon(Icons.refresh),
             onPressed: _loadStats,
             tooltip: 'Rafraîchir',
+          ),
+          // Bouton de déconnexion
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Se déconnecter',
+            onPressed: () {
+              AuthService().logout();
+              Navigator.pushReplacementNamed(context, '/login');
+            },
           ),
         ],
       ),

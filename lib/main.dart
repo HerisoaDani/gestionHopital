@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'screens/dashboard/dashboard_screen.dart';
+import 'screens/login_screen.dart';
 
 void main() {
   // runApp() lance l'application Flutter
@@ -53,6 +54,12 @@ class HopitalApp extends StatelessWidget {
           ),
         ),
       ),
+
+      initialRoute: '/login',
+      routes: {
+        '/login': (context) => const LoginScreen(),
+        '/home': (context) => const DashboardScreen(), // écran principal
+      },
 
       // L'écran affiché au lancement = Tableau de bord
       home: const DashboardScreen(),

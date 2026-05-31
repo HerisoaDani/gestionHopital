@@ -11,6 +11,7 @@ import '../models/chambre.dart';
 import '../models/bloc.dart';
 import '../models/hospitalisation.dart';
 import '../models/facture.dart';
+import '../services/auth_service.dart';
 
 class DatabaseHelper {
   // Singleton Pattern : une seule instance de la BDD dans toute l'app
@@ -87,11 +88,23 @@ class DatabaseHelper {
       )
     ''');
 
+    //Table Users
+    await db.execute('''
+      CREATE TABLE users(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT NOT NULL UNIQUE,
+        password TEXT NOT NULL,
+        role TEXT NOT NULL DEFAULT 'user',
+        nom TEXT NOT NULL
+      )
+    ''');
+
     // Données de démonstration pour tester l'app
     await _insertDemoData(db);
     await _createNouvellesTables(db);
     await _insertDemoDataHospitalisation(db);
     await _createTablesFacturation(db);
+    await AuthService().initDefaultUser(db);
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {

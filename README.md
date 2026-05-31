@@ -127,3 +127,7 @@ intl: ^0.18.1       # Formatage des dates
 - Synchroniser avec un **serveur distant** (API REST) : feature/serveur-distant
 - Ajouter une **authentification** (médecin, secrétaire, admin) : feature/authentification
 - Ajouter des **graphiques** de statistiques : feature/dashboard
+
+---
+# Login par défaut
+id : admin / mdp: admin123
